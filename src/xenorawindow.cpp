@@ -147,14 +147,14 @@ void XenoraWindow::setResizable(bool resizable) {
 void XenoraWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton && m_titleBar->rect().contains(event->pos())) {
         m_isDragging = true;
-        m_dragStartPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        m_dragStartPosition = event->globalPos() - frameGeometry().topLeft();
     }
     QWidget::mousePressEvent(event);
 }
 
 void XenoraWindow::mouseMoveEvent(QMouseEvent *event) {
     if (m_isDragging && (event->buttons() & Qt::LeftButton)) {
-        move(event->globalPosition().toPoint() - m_dragStartPosition);
+        move(event->globalPos() - m_dragStartPosition);
     }
     QWidget::mouseMoveEvent(event);
 }
