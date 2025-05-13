@@ -1,7 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-        <file>background.jpg</file>
+        background.jpg
         start-icon.png
         Xenoraos-logo.png
         xenora.desktop
