@@ -2,191 +2,105 @@
 #include "XenoraButton.h"
 #include "../desktopenv/StyleManager.h"
 
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPainter>
-#include <QPainterPath>
 #include <QMouseEvent>
-#include <QGraphicsDropShadowEffect>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QScreen>
+#include <QGraphicsDropShadowEffect>
 #include <QDebug>
 
-XenoraWindow::XenoraWindow(QWidget *parent)
+XenoraWindow::XenoraWindow(QWidget *parent, Window xWindowId)
     : QWidget(parent),
-      m_title("Xenora Window"),
-      m_windowState(Normal),
+      m_windowId(xWindowId),
+      m_isMaximized(false),
       m_isDragging(false),
-      m_resizeDirection(None),
-      m_borderWidth(5)
+      m_resizeArea(None)
 {
-    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
     setAttribute(Qt::WA_TranslucentBackground);
     
-    // Apply shadow effect
+    // Create shadow effect
     QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
     shadowEffect->setBlurRadius(20);
-    shadowEffect->setColor(QColor(0, 0, 0, 70));
+    shadowEffect->setColor(QColor(0, 0, 0, 80));
     shadowEffect->setOffset(0, 0);
     setGraphicsEffect(shadowEffect);
     
     setupUi();
-    setMinimumSize(200, 150);
-}
-
-XenoraWindow::XenoraWindow(const QString &title, QWidget *parent)
-    : XenoraWindow(parent)
-{
-    setTitle(title);
 }
 
 XenoraWindow::~XenoraWindow()
 {
 }
 
-void XenoraWindow::setContent(QWidget *content)
-{
-    if (!content) return;
-    
-    // Clear existing content
-    QLayoutItem *child;
-    while ((child = m_contentLayout->takeAt(0)) != nullptr) {
-        if (child->widget()) {
-            child->widget()->setParent(nullptr);
-        }
-        delete child;
-    }
-    
-    // Add new content
-    m_contentLayout->addWidget(content);
-}
-
-void XenoraWindow::setIcon(const QPixmap &icon)
-{
-    m_icon = icon;
-    if (!m_icon.isNull()) {
-        m_iconLabel->setPixmap(m_icon.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        m_iconLabel->setVisible(true);
-    } else {
-        m_iconLabel->setVisible(false);
-    }
-}
-
 void XenoraWindow::setTitle(const QString &title)
 {
-    m_title = title;
     m_titleLabel->setText(title);
 }
 
 QString XenoraWindow::title() const
 {
-    return m_title;
+    return m_titleLabel->text();
 }
 
-XenoraWindow::WindowState XenoraWindow::windowState() const
+void XenoraWindow::setMaximized(bool maximized)
 {
-    return m_windowState;
-}
-
-void XenoraWindow::minimize()
-{
-    if (m_windowState != Minimized) {
-        m_windowState = Minimized;
-        showMinimized();
-        emit windowStateChanged(m_windowState);
-    }
-}
-
-void XenoraWindow::maximize()
-{
-    if (m_windowState != Maximized) {
-        m_normalGeometry = geometry();
-        m_windowState = Maximized;
-        
-        QRect screenGeometry = QApplication::primaryScreen()->availableGeometry();
-        setGeometry(screenGeometry);
-        
-        updateWindowButtons();
-        emit windowStateChanged(m_windowState);
-    }
-}
-
-void XenoraWindow::restore()
-{
-    if (m_windowState != Normal) {
-        m_windowState = Normal;
-        
-        if (m_normalGeometry.isValid()) {
-            setGeometry(m_normalGeometry);
-        }
-        
-        updateWindowButtons();
-        emit windowStateChanged(m_windowState);
-    }
-}
-
-void XenoraWindow::toggleMaximize()
-{
-    if (m_windowState == Maximized) {
-        restore();
+    m_isMaximized = maximized;
+    
+    // Update maximize button icon
+    if (m_isMaximized) {
+        m_maximizeButton->setIcon(QIcon(":/icons/system/restore.svg"));
     } else {
-        maximize();
+        m_maximizeButton->setIcon(QIcon(":/icons/system/maximize.svg"));
+    }
+    
+    // Disable shadow when maximized
+    graphicsEffect()->setEnabled(!m_isMaximized);
+}
+
+void XenoraWindow::restorePreviousGeometry()
+{
+    if (!m_previousGeometry.isNull()) {
+        setGeometry(m_previousGeometry);
     }
 }
 
-void XenoraWindow::showFullScreen()
+void XenoraWindow::saveCurrentGeometry()
 {
-    if (m_windowState != FullScreen) {
-        m_normalGeometry = geometry();
-        m_windowState = FullScreen;
-        QWidget::showFullScreen();
-        emit windowStateChanged(m_windowState);
+    if (!m_isMaximized) {
+        m_previousGeometry = geometry();
     }
-}
-
-void XenoraWindow::exitFullScreen()
-{
-    if (m_windowState == FullScreen) {
-        m_windowState = Normal;
-        QWidget::showNormal();
-        if (m_normalGeometry.isValid()) {
-            setGeometry(m_normalGeometry);
-        }
-        emit windowStateChanged(m_windowState);
-    }
-}
-
-void XenoraWindow::closeWindow()
-{
-    emit windowClosed();
-    close();
 }
 
 void XenoraWindow::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
-    
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     
+    // Create rounded rectangle for window
+    QColor windowColor = StyleManager::currentTheme().windowColor;
     QRect windowRect = rect();
-    int cornerRadius = StyleManager::cornerRadius();
     
-    // Draw window background
-    QColor bgColor = StyleManager::currentTheme().windowColor;
+    // Adjust the rect when maximized to remove rounded corners
+    int cornerRadius = m_isMaximized ? 0 : StyleManager::cornerRadius();
     
     painter.setPen(Qt::NoPen);
-    painter.setBrush(bgColor);
+    painter.setBrush(windowColor);
     painter.drawRoundedRect(windowRect, cornerRadius, cornerRadius);
-    
-    QWidget::paintEvent(event);
 }
 
 void XenoraWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        m_resizeDirection = getResizeDirection(event->pos());
+        m_resizeArea = getResizeArea(event->pos());
         
-        if (m_resizeDirection == None && m_titleBar->geometry().contains(event->pos())) {
+        if (m_resizeArea != None) {
+            // Resize mode
+        } else if (m_titleBar->geometry().contains(event->pos())) {
+            // Title bar drag mode
             m_isDragging = true;
             m_dragPosition = event->globalPos() - frameGeometry().topLeft();
         }
@@ -195,212 +109,225 @@ void XenoraWindow::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void XenoraWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        m_isDragging = false;
-        m_resizeDirection = None;
-        setCursor(Qt::ArrowCursor);
-    }
-    
-    QWidget::mouseReleaseEvent(event);
-}
-
 void XenoraWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_windowState == Maximized || m_windowState == FullScreen) {
+    if (m_isMaximized) {
         QWidget::mouseMoveEvent(event);
         return;
     }
     
+    updateCursor(event->pos());
+    
     if (event->buttons() & Qt::LeftButton) {
-        if (m_resizeDirection != None) {
-            // Resize window
-            QRect newGeometry = geometry();
-            
-            if (m_resizeDirection & Left) {
-                int newX = event->globalX();
-                int newWidth = geometry().right() - newX + 1;
-                if (newWidth >= minimumWidth()) {
-                    newGeometry.setLeft(newX);
-                }
-            }
-            
-            if (m_resizeDirection & Right) {
-                int newWidth = event->globalX() - geometry().left() + 1;
-                if (newWidth >= minimumWidth()) {
-                    newGeometry.setRight(event->globalX());
-                }
-            }
-            
-            if (m_resizeDirection & Top) {
-                int newY = event->globalY();
-                int newHeight = geometry().bottom() - newY + 1;
-                if (newHeight >= minimumHeight()) {
-                    newGeometry.setTop(newY);
-                }
-            }
-            
-            if (m_resizeDirection & Bottom) {
-                int newHeight = event->globalY() - geometry().top() + 1;
-                if (newHeight >= minimumHeight()) {
-                    newGeometry.setBottom(event->globalY());
-                }
-            }
-            
-            setGeometry(newGeometry);
-        } else if (m_isDragging) {
+        if (m_isDragging) {
             // Move window
             move(event->globalPos() - m_dragPosition);
+        } else if (m_resizeArea != None) {
+            // Resize window
+            QRect newGeom = geometry();
+            QPoint delta = event->globalPos() - QPoint(newGeom.x(), newGeom.y()) - m_dragPosition;
+            
+            switch (m_resizeArea) {
+                case Top:
+                    newGeom.setTop(newGeom.top() + delta.y());
+                    break;
+                case Bottom:
+                    newGeom.setBottom(event->globalPos().y());
+                    break;
+                case Left:
+                    newGeom.setLeft(newGeom.left() + delta.x());
+                    break;
+                case Right:
+                    newGeom.setRight(event->globalPos().x());
+                    break;
+                case TopLeft:
+                    newGeom.setTopLeft(newGeom.topLeft() + QPoint(delta.x(), delta.y()));
+                    break;
+                case TopRight:
+                    newGeom.setTopRight(QPoint(event->globalPos().x(), newGeom.top() + delta.y()));
+                    break;
+                case BottomLeft:
+                    newGeom.setBottomLeft(QPoint(newGeom.left() + delta.x(), event->globalPos().y()));
+                    break;
+                case BottomRight:
+                    newGeom.setBottomRight(event->globalPos());
+                    break;
+                default:
+                    break;
+            }
+            
+            // Enforce minimum size
+            int minWidth = 200;
+            int minHeight = 150;
+            if (newGeom.width() >= minWidth && newGeom.height() >= minHeight) {
+                setGeometry(newGeom);
+                m_dragPosition = event->globalPos() - QPoint(newGeom.x(), newGeom.y());
+            }
         }
-    } else {
-        // Update cursor based on resize direction
-        ResizeDirection direction = getResizeDirection(event->pos());
-        updateCursor(direction);
     }
     
     QWidget::mouseMoveEvent(event);
 }
 
+void XenoraWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_isDragging = false;
+    m_resizeArea = None;
+    setCursor(Qt::ArrowCursor);
+    
+    QWidget::mouseReleaseEvent(event);
+}
+
 void XenoraWindow::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    
-    // Ensure title bar buttons stay on the right
-    updateWindowButtons();
 }
 
-bool XenoraWindow::eventFilter(QObject *watched, QEvent *event)
+void XenoraWindow::handleCloseClicked()
 {
-    if (watched == m_titleBar && event->type() == QEvent::MouseButtonDblClick) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::LeftButton) {
-            toggleMaximize();
-            return true;
-        }
+    // This will emit a signal that WindowManager will pick up
+    emit close();
+}
+
+void XenoraWindow::handleMaximizeClicked()
+{
+    if (m_isMaximized) {
+        // Restore
+        setMaximized(false);
+        restorePreviousGeometry();
+    } else {
+        // Maximize
+        saveCurrentGeometry();
+        setMaximized(true);
+        setGeometry(QApplication::desktop()->availableGeometry(this));
     }
-    
-    return QWidget::eventFilter(watched, event);
+}
+
+void XenoraWindow::handleMinimizeClicked()
+{
+    showMinimized();
 }
 
 void XenoraWindow::setupUi()
 {
-    m_mainLayout = new QVBoxLayout(this);
-    m_mainLayout->setContentsMargins(m_borderWidth, m_borderWidth, m_borderWidth, m_borderWidth);
-    m_mainLayout->setSpacing(0);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
     
-    createTitleBar();
+    setupTitleBar();
+    mainLayout->addWidget(m_titleBar);
     
-    // Content container
-    m_contentContainer = new QWidget(this);
-    m_contentLayout = new QVBoxLayout(m_contentContainer);
-    m_contentLayout->setContentsMargins(0, 0, 0, 0);
+    // Add window content placeholder
+    QWidget *contentWidget = new QWidget(this);
+    contentWidget->setObjectName("windowContent");
+    contentWidget->setStyleSheet("background-color: transparent;");
     
-    m_mainLayout->addWidget(m_titleBar);
-    m_mainLayout->addWidget(m_contentContainer, 1);
-    
-    setLayout(m_mainLayout);
+    mainLayout->addWidget(contentWidget, 1);
+    setLayout(mainLayout);
 }
 
-void XenoraWindow::createTitleBar()
+void XenoraWindow::setupTitleBar()
 {
     m_titleBar = new QWidget(this);
-    m_titleBar->setObjectName("windowTitleBar");
-    m_titleBar->setFixedHeight(40);
-    m_titleBar->installEventFilter(this);
+    m_titleBar->setObjectName("titleBar");
+    m_titleBar->setFixedHeight(36);
     
-    m_titleBarLayout = new QHBoxLayout(m_titleBar);
-    m_titleBarLayout->setContentsMargins(10, 0, 10, 0);
+    QHBoxLayout *titleBarLayout = new QHBoxLayout(m_titleBar);
+    titleBarLayout->setContentsMargins(12, 0, 12, 0);
+    titleBarLayout->setSpacing(8);
     
-    m_iconLabel = new QLabel(m_titleBar);
-    m_iconLabel->setFixedSize(16, 16);
-    m_iconLabel->setVisible(false);
+    // Window title
+    m_titleLabel = new QLabel(this);
+    m_titleLabel->setObjectName("windowTitle");
+    m_titleLabel->setText("XenoraOS Window");
+    m_titleLabel->setAlignment(Qt::AlignCenter);
     
-    m_titleLabel = new QLabel(m_title, m_titleBar);
-    m_titleLabel->setStyleSheet("font-size: 12px; font-weight: bold;");
+    // Window buttons
+    setupWindowButtons();
     
-    createWindowButtons();
+    titleBarLayout->addWidget(m_titleLabel, 1);
+    titleBarLayout->addWidget(m_minimizeButton);
+    titleBarLayout->addWidget(m_maximizeButton);
+    titleBarLayout->addWidget(m_closeButton);
     
-    m_titleBarLayout->addWidget(m_iconLabel);
-    m_titleBarLayout->addWidget(m_titleLabel, 1);
-    m_titleBarLayout->addWidget(m_minimizeButton);
-    m_titleBarLayout->addWidget(m_maximizeButton);
-    m_titleBarLayout->addWidget(m_closeButton);
+    m_titleBar->setLayout(titleBarLayout);
     
-    m_titleBar->setLayout(m_titleBarLayout);
-    
-    // Style title bar
-    QColor titleBarColor = StyleManager::currentTheme().foregroundColor;
+    // Style the title bar
     m_titleBar->setStyleSheet(
-        "background-color: " + titleBarColor.name() + ";"
-        "border-top-left-radius: " + QString::number(StyleManager::cornerRadius()) + "px;"
-        "border-top-right-radius: " + QString::number(StyleManager::cornerRadius()) + "px;"
+        "QWidget#titleBar {"
+        "  background-color: transparent;"
+        "}"
+        "QLabel#windowTitle {"
+        "  color: " + StyleManager::currentTheme().textColor.name() + ";"
+        "  font-size: 12px;"
+        "}"
     );
 }
 
-void XenoraWindow::createWindowButtons()
+void XenoraWindow::setupWindowButtons()
 {
-    m_minimizeButton = new XenoraButton(m_titleBar);
+    // Minimize button
+    m_minimizeButton = new XenoraButton(this);
     m_minimizeButton->setIcon(QIcon(":/icons/system/minimize.svg"));
-    m_minimizeButton->setIconSize(QSize(12, 12));
-    m_minimizeButton->setFixedSize(30, 30);
+    m_minimizeButton->setIconSize(QSize(16, 16));
+    m_minimizeButton->setFixedSize(36, 36);
     m_minimizeButton->setButtonStyle(XenoraButton::Icon);
     
-    m_maximizeButton = new XenoraButton(m_titleBar);
+    // Maximize button
+    m_maximizeButton = new XenoraButton(this);
     m_maximizeButton->setIcon(QIcon(":/icons/system/maximize.svg"));
-    m_maximizeButton->setIconSize(QSize(12, 12));
-    m_maximizeButton->setFixedSize(30, 30);
+    m_maximizeButton->setIconSize(QSize(16, 16));
+    m_maximizeButton->setFixedSize(36, 36);
     m_maximizeButton->setButtonStyle(XenoraButton::Icon);
     
-    m_closeButton = new XenoraButton(m_titleBar);
+    // Close button
+    m_closeButton = new XenoraButton(this);
     m_closeButton->setIcon(QIcon(":/icons/system/close.svg"));
-    m_closeButton->setIconSize(QSize(12, 12));
-    m_closeButton->setFixedSize(30, 30);
+    m_closeButton->setIconSize(QSize(16, 16));
+    m_closeButton->setFixedSize(36, 36);
     m_closeButton->setButtonStyle(XenoraButton::Icon);
-    m_closeButton->setHoverColor(QColor(232, 17, 35, 180));
+    m_closeButton->setHoverColor(QColor(232, 17, 35));
     
-    connect(m_minimizeButton, &XenoraButton::clicked, this, &XenoraWindow::minimize);
-    connect(m_maximizeButton, &XenoraButton::clicked, this, &XenoraWindow::toggleMaximize);
-    connect(m_closeButton, &XenoraButton::clicked, this, &XenoraWindow::closeWindow);
+    // Connect signals
+    connect(m_minimizeButton, &XenoraButton::clicked, this, &XenoraWindow::handleMinimizeClicked);
+    connect(m_maximizeButton, &XenoraButton::clicked, this, &XenoraWindow::handleMaximizeClicked);
+    connect(m_closeButton, &XenoraButton::clicked, this, &XenoraWindow::handleCloseClicked);
 }
 
-void XenoraWindow::updateWindowButtons()
+XenoraWindow::ResizeArea XenoraWindow::getResizeArea(const QPoint &pos)
 {
-    if (m_windowState == Maximized) {
-        m_maximizeButton->setIcon(QIcon(":/icons/system/restore.svg"));
-    } else {
-        m_maximizeButton->setIcon(QIcon(":/icons/system/maximize.svg"));
-    }
-}
-
-XenoraWindow::ResizeDirection XenoraWindow::getResizeDirection(const QPoint &pos)
-{
-    if (m_windowState == Maximized || m_windowState == FullScreen) {
+    if (m_isMaximized) {
         return None;
     }
     
-    const int borderWidth = m_borderWidth;
+    const int borderWidth = 8;
     
-    bool top = pos.y() <= borderWidth;
-    bool bottom = pos.y() >= height() - borderWidth;
-    bool left = pos.x() <= borderWidth;
-    bool right = pos.x() >= width() - borderWidth;
+    bool onLeft = pos.x() <= borderWidth;
+    bool onRight = pos.x() >= width() - borderWidth;
+    bool onTop = pos.y() <= borderWidth;
+    bool onBottom = pos.y() >= height() - borderWidth;
     
-    if (top && left) return TopLeft;
-    if (top && right) return TopRight;
-    if (bottom && left) return BottomLeft;
-    if (bottom && right) return BottomRight;
-    if (top) return Top;
-    if (bottom) return Bottom;
-    if (left) return Left;
-    if (right) return Right;
+    if (onTop && onLeft) return TopLeft;
+    if (onTop && onRight) return TopRight;
+    if (onBottom && onLeft) return BottomLeft;
+    if (onBottom && onRight) return BottomRight;
+    if (onTop) return Top;
+    if (onBottom) return Bottom;
+    if (onLeft) return Left;
+    if (onRight) return Right;
     
     return None;
 }
 
-void XenoraWindow::updateCursor(ResizeDirection direction)
+void XenoraWindow::updateCursor(const QPoint &pos)
 {
-    switch (direction) {
+    if (m_isDragging || m_isMaximized) {
+        return;
+    }
+    
+    m_resizeArea = getResizeArea(pos);
+    
+    switch (m_resizeArea) {
         case Top:
         case Bottom:
             setCursor(Qt::SizeVerCursor);
@@ -417,7 +344,6 @@ void XenoraWindow::updateCursor(ResizeDirection direction)
         case BottomLeft:
             setCursor(Qt::SizeBDiagCursor);
             break;
-        case None:
         default:
             setCursor(Qt::ArrowCursor);
             break;
