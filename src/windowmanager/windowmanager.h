@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QWidget>
+#include <QEvent>
 #include "../xenorawindow.h"
 
 class WindowManager : public QObject {
@@ -21,6 +22,10 @@ public:
     
     QList<XenoraWindow*> getAllWindows() const;
     XenoraWindow* getActiveWindow() const;
+
+protected:
+    // Add event filter method to catch window activation
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void onWindowActivated();

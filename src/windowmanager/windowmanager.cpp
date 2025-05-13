@@ -1,10 +1,13 @@
 #include "windowmanager.h"
 #include <QDebug>
+#include <QApplication>
 
 WindowManager::WindowManager(QObject *parent)
     : QObject(parent),
       m_activeWindow(nullptr)
 {
+    // Set up an event filter to detect window activation
+    qApp->installEventFilter(this);
 }
 
 WindowManager::~WindowManager() {
@@ -24,8 +27,8 @@ XenoraWindow* WindowManager::createWindow(const QString &title) {
         this->closeWindow(window);
     });
     
-    // Connect activation signal
-    connect(window, &QWidget::windowActivated, this, &WindowManager::onWindowActivated);
+    // No need for the direct windowActivated connection anymore
+    // We'll use event filtering instead
     
     // Add to window list
     m_windows.append(window);
@@ -39,6 +42,19 @@ XenoraWindow* WindowManager::createWindow(const QString &title) {
     window->activateWindow();
     
     return window;
+}
+
+// Add an event filter to catch window activation
+bool WindowManager::eventFilter(QObject *watched, QEvent *event) {
+    if (event->type() == QEvent::WindowActivate) {
+        XenoraWindow *window = qobject_cast<XenoraWindow*>(watched);
+        if (window && m_windows.contains(window)) {
+            m_activeWindow = window;
+        }
+    }
+    
+    // Let the event continue
+    return QObject::eventFilter(watched, event);
 }
 
 void WindowManager::closeWindow(XenoraWindow *window) {
