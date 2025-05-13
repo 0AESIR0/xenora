@@ -1,60 +1,61 @@
 cmake_minimum_required(VERSION 3.10)
-project(XenoraOS)
+project(XenoraOS VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Widgets Core Gui Network X11Extras REQUIRED)
+# Qt5 bileşenlerini bul
+find_package(Qt5 COMPONENTS Widgets X11Extras REQUIRED)
 find_package(X11 REQUIRED)
 
-include_directories(${X11_INCLUDE_DIR})
+# Derleme seçenekleri
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-# QRC dosyasını devre dışı bırakıyoruz
-# set(RESOURCE_FILES
-#     resources/resources.qrc
-# )
-
-set(SOURCE_FILES
+# Kaynak dosyaları
+set(SOURCES
     src/main.cpp
-    src/xenorasystem.cpp
-    src/xenorawindow.cpp
-    src/panel/panel.cpp
-    src/panel/startmenu.cpp
-    src/panel/systray.cpp
-    src/desktop/desktop.cpp
-    src/desktop/desktopiconview.cpp
-    src/windowmanager/windowmanager.cpp
-    src/settings/settingsmanager.cpp
+    src/mainwindow.cpp
+    src/desktopmanager.cpp
+    src/desktopicon.cpp
+    src/panel.cpp
+    src/taskbar.cpp
+    src/systemtray.cpp
+    src/launcher.cpp
+    src/filemanager.cpp
+    src/systemsettings.cpp
+    resources/resources.qrc
 )
 
-set(HEADER_FILES
-    src/xenorasystem.h
-    src/xenorawindow.h
-    src/panel/panel.h
-    src/panel/startmenu.h
-    src/panel/systray.h
-    src/desktop/desktop.h
-    src/desktop/desktopiconview.h
-    src/windowmanager/windowmanager.h
-    src/settings/settingsmanager.h
+# Header dosyaları
+set(HEADERS
+    src/mainwindow.h
+    src/desktopmanager.h
+    src/desktopicon.h
+    src/panel.h
+    src/taskbar.h
+    src/systemtray.h
+    src/launcher.h
+    src/filemanager.h
+    src/systemsettings.h
 )
 
-# QRC kaldırıldı
-add_executable(xenora-ui ${SOURCE_FILES} ${HEADER_FILES})
+# Çalıştırılabilir dosya
+add_executable(xenora-ui ${SOURCES} ${HEADERS})
 
-target_link_libraries(xenora-ui
+# Bağımlılıklar
+target_link_libraries(xenora-ui PRIVATE
     Qt5::Widgets
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Network
     Qt5::X11Extras
     ${X11_LIBRARIES}
-    Xcomposite
-    Xdamage
-    Xrender
 )
 
-# Tüm kaynak dosyalarını kopyala
-file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})
+# Include klasörü
+include_directories(include)
+
+# Hedef dizinler
+install(TARGETS xenora-ui DESTINATION bin)
+install(FILES resources/xeonaos.desktop DESTINATION /usr/share/xsessions)
+install(FILES resources/Xenoraos-logo.png DESTINATION /usr/share/pixmaps)

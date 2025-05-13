@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=XenoraOS GUI
+Comment=XenoraOS Modern Desktop Environment
+Exec=xenora-ui
+Type=Application
+Icon=/usr/share/pixmaps/Xenoraos.png

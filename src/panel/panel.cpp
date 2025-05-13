@@ -1,117 +1,130 @@
-#include "panel.h"
-#include <QScreen>
-#include <QApplication>
-#include <QDebug>
+#include "panel/panel.h"
+
 #include <QPainter>
-#include <QDateTime>
+#include <QMouseEvent>
+#include <QMenu>
+#include <QAction>
+#include <QProcess>
 #include <QTimer>
-#include <QDir>
+#include <QDateTime>
+#include <QGraphicsDropShadowEffect>
 
 Panel::Panel(QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint),
-      m_panelWidget(nullptr),
-      m_startButton(nullptr),
-      m_clockLabel(nullptr),
-      m_systemTray(nullptr),
-      m_layout(nullptr),
-      m_startMenuVisible(false)
+    : QWidget(parent)
 {
-    setAttribute(Qt::WA_TranslucentBackground);
-    setWindowTitle("XenoraOS Panel");
+    // Panel stili
+    setFixedHeight(height());
     
-    initializePanel();
+    // Gölge efekti
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
+    shadowEffect->setBlurRadius(10);
+    shadowEffect->setColor(QColor(0, 0, 0, 160));
+    shadowEffect->setOffset(0, 0);
+    setGraphicsEffect(shadowEffect);
     
-    // Position panel at the bottom of the screen
-    updateGeometry(QApplication::primaryScreen()->geometry());
-}
-
-Panel::~Panel() {
-    // Clean up resources
-}
-
-void Panel::initializePanel() {
-    // Create main layout
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
+    // Panel düzeni
+    m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(5, 2, 5, 2);
+    m_layout->setSpacing(4);
     
-    // Create panel widget
-    m_panelWidget = new QWidget(this);
-    m_panelWidget->setObjectName("XenoraPanel");
+    // Başlat düğmesi
+    m_startButton = new QPushButton(this);
+    m_startButton->setIcon(QIcon(":/images/icons/home.png"));
+    m_startButton->setIconSize(QSize(32, 32));
+    m_startButton->setFixedSize(40, 40);
+    m_startButton->setStyleSheet("QPushButton { background-color: rgba(60, 60, 80, 180); border-radius: 20px; }");
+    connect(m_startButton, &QPushButton::clicked, this, &Panel::startMenuClicked);
     
-    // Create panel layout
-    m_layout = new QHBoxLayout(m_panelWidget);
-    m_layout->setContentsMargins(10, 5, 10, 5);
-    m_layout->setSpacing(10);
+    // Görev çubuğu
+    m_taskbar = new Taskbar(this);
     
-    // Create panel elements
-    setupStartButton();
+    // Sistem tepsisi
+    m_systemTray = new SystemTray(this);
     
-    // Create system tray
-    m_systemTray = new SystemTray(m_panelWidget);
+    // Saat
+    m_clockLabel = new QLabel(this);
+    m_clockLabel->setAlignment(Qt::AlignCenter);
+    m_clockLabel->setStyleSheet("color: white; font-size: 12px;");
+    updateClock();
     
-    // Create clock
-    setupClock();
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &Panel::clockTick);
+    timer->start(1000);
     
-    // Add elements to panel layout
+    // Düzene ekle
     m_layout->addWidget(m_startButton);
-    m_layout->addStretch(1);
+    m_layout->addSpacing(5);
+    m_layout->addWidget(m_taskbar, 1);
     m_layout->addWidget(m_systemTray);
     m_layout->addWidget(m_clockLabel);
     
-    // Add panel widget to main layout
-    mainLayout->addWidget(m_panelWidget);
-    
-    // Set the layout for this widget
-    setLayout(mainLayout);
+    setLayout(m_layout);
 }
 
-void Panel::setupStartButton() {
-    m_startButton = new QPushButton(m_panelWidget);
-    m_startButton->setObjectName("StartButton");
-    m_startButton->setFixedSize(40, 40);
-    m_startButton->setIcon(QIcon(QDir::currentPath() + "/resources/icons/start.png"));
-    m_startButton->setIconSize(QSize(24, 24));
-    m_startButton->setToolTip("Start Menu");
-    
-    connect(m_startButton, &QPushButton::clicked, this, &Panel::onStartButtonClicked);
+Panel::~Panel()
+{
 }
 
-void Panel::setupClock() {
-    m_clockLabel = new QLabel(m_panelWidget);
-    m_clockLabel->setObjectName("ClockLabel");
-    m_clockLabel->setAlignment(Qt::AlignCenter);
+void Panel::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     
-    // Update clock immediately
+    // Panel arkaplanı
+    QLinearGradient gradient(0, 0, 0, height());
+    gradient.setColorAt(0, QColor(60, 60, 80, 220));
+    gradient.setColorAt(1, QColor(40, 40, 60, 220));
+    
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(gradient);
+    painter.drawRoundedRect(rect(), 15, 15);
+}
+
+void Panel::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+}
+
+void Panel::createStartMenu()
+{
+    QMenu *menu = new QMenu(this);
+    menu->setStyleSheet("QMenu { background-color: rgba(40, 40, 60, 240); border: 1px solid rgba(80, 80, 100, 100); border-radius: 10px; }"
+                       "QMenu::item { padding: 8px 20px; color: white; }"
+                       "QMenu::item:selected { background-color: rgba(80, 80, 120, 200); }");
+    
+    QAction *terminalAction = new QAction("Terminal", menu);
+    connect(terminalAction, &QAction::triggered, [this]() {
+        QProcess::startDetached("x-terminal-emulator", QStringList());
+    });
+    
+    QAction *settingsAction = new QAction("Ayarlar", menu);
+    
+    QAction *logoutAction = new QAction("Çıkış", menu);
+    connect(logoutAction, &QAction::triggered, []() {
+        QApplication::quit();
+    });
+    
+    menu->addAction(terminalAction);
+    menu->addAction(settingsAction);
+    menu->addSeparator();
+    menu->addAction(logoutAction);
+    
+    menu->exec(mapToGlobal(m_startButton->pos() + QPoint(0, m_startButton->height())));
+    menu->deleteLater();
+}
+
+void Panel::startMenuClicked()
+{
+    createStartMenu();
+}
+
+void Panel::clockTick()
+{
     updateClock();
-    
-    // Update clock every second
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Panel::updateClock);
-    timer->start(1000);
 }
 
-void Panel::updateGeometry(const QRect &screenGeometry) {
-    // Panel height is 50 pixels
-    int panelHeight = 50;
-    
-    // Set panel width to screen width
-    int panelWidth = screenGeometry.width();
-    
-    // Position panel at the bottom of the screen
-    int panelX = screenGeometry.x();
-    int panelY = screenGeometry.height() - panelHeight;
-    
-    // Set geometry
-    setGeometry(panelX, panelY, panelWidth, panelHeight);
-}
-
-void Panel::onStartButtonClicked() {
-    m_startMenuVisible = !m_startMenuVisible;
-    emit startMenuToggled(m_startMenuVisible);
-}
-
-void Panel::updateClock() {
+void Panel::updateClock()
+{
     QDateTime now = QDateTime::currentDateTime();
-    m_clockLabel->setText(now.toString("hh:mm:ss"));
+    m_clockLabel->setText(now.toString("HH:mm"));
 }
