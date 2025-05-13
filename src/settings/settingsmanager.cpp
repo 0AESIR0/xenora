@@ -6,7 +6,7 @@
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
       m_settings(nullptr),
-      m_backgroundPath(":/background.jpg"),
+      m_backgroundPath(":/backgrounds/background.jpg"),
       m_themeName("Default"),
       m_accentColor(0, 120, 215),
       m_darkMode(true),

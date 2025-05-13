@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     app.setApplicationVersion("1.0.0");
     
     // Load custom font
-    int fontId = QFontDatabase::addApplicationFont(":/fonts/xenora-font.ttf");
+    int fontId = QFontDatabase::addApplicationFont(":/fonts/XenoraOS-Regular.ttf");
     if (fontId != -1) {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
         QFont font(fontFamily);

@@ -12,7 +12,7 @@ Desktop::Desktop(QWidget *parent)
       m_startMenu(nullptr)
 {
     initializeDesktop();
-    setBackground(":/background.jpg");
+    setBackground(":/backgrounds/background.jpg");
 }
 
 Desktop::~Desktop() {
@@ -110,9 +110,9 @@ void Desktop::onStartMenuToggled(bool visible) {
 
 void Desktop::setupDesktopIcons() {
     // Add some default desktop icons
-    m_iconView->addIcon("Home", ":/icons/home.png");
-    m_iconView->addIcon("Documents", ":/icons/documents.png");
-    m_iconView->addIcon("Pictures", ":/icons/pictures.png");
-    m_iconView->addIcon("Music", ":/icons/music.png");
-    m_iconView->addIcon("Settings", ":/icons/settings.png");
+    m_iconView->addIcon("Home", ":/icons/system/home.png");
+    m_iconView->addIcon("Documents", ":/icons/system/documents.png");
+    m_iconView->addIcon("Pictures", ":/icons/system/pictures.png");
+    m_iconView->addIcon("Music", ":/icons/system/music.png");
+    m_iconView->addIcon("Settings", ":/icons/system/settings.png");
 }

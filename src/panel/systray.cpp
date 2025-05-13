@@ -26,13 +26,13 @@ void SystemTray::initializeSystemTray() {
 void SystemTray::setupDefaultIcons() {
     // Add default system tray icons
     // Network
-    addTrayIcon("Network", QIcon::fromTheme("network-wireless"));
+    addTrayIcon("Network", QIcon(":/icons/system/wifi.png"));
     
     // Volume
-    addTrayIcon("Volume", QIcon::fromTheme("audio-volume-high"));
+    addTrayIcon("Volume", QIcon(":/icons/system/volume.png"));
     
     // Battery
-    addTrayIcon("Battery", QIcon::fromTheme("battery-full"));
+    addTrayIcon("Battery", QIcon(":/icons/system/battery.png"));
 }
 
 void SystemTray::addTrayIcon(const QString &name, const QIcon &icon) {

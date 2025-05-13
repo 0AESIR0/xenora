@@ -81,16 +81,19 @@ void XenoraWindow::createTitleBar() {
     m_minimizeButton->setObjectName("MinimizeButton");
     m_minimizeButton->setFixedSize(24, 24);
     m_minimizeButton->setToolTip("Minimize");
+    m_minimizeButton->setIcon(QIcon(":/icons/system/minimmize.png"));
     
     m_maximizeButton = new QPushButton(m_titleBar);
     m_maximizeButton->setObjectName("MaximizeButton");
     m_maximizeButton->setFixedSize(24, 24);
     m_maximizeButton->setToolTip("Maximize");
+    m_maximizeButton->setIcon(QIcon(":/icons/system/maximize.png"));
     
     m_closeButton = new QPushButton(m_titleBar);
     m_closeButton->setObjectName("CloseButton");
     m_closeButton->setFixedSize(24, 24);
     m_closeButton->setToolTip("Close");
+    m_closeButton->setIcon(QIcon(":/icons/system/close.png"));
     
     // Add widgets to title layout
     titleLayout->addWidget(m_titleLabel, 1);
