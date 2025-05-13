@@ -2,7 +2,7 @@
 <RCC version="1.0">
     <qresource prefix="/">
         <file>background.jpg</file>
-        <file>fonts/XenoraOS-Regular.ttf</file>
+        <file>fonts/xenora-font.ttf</file>
         <file>icons/start.png</file>
         <file>icons/settings.png</file>
         <file>icons/power.png</file>

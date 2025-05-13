@@ -34,6 +34,7 @@ private:
     SettingsManager* m_settingsManager;
     
     void setupSystemConnections();
+    void createFallbackResources(); // Yeni fonksiyon
 };
 
 #endif // XENORASYSTEM_H

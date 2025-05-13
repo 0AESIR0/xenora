@@ -1,8 +1,9 @@
-/* Modern XenoraOS styleSheet */
+/* Ultra Modern XenoraOS StyleSheet */
 
 QWidget {
-    font-family: "Xenora Font", sans-serif;
+    font-family: "Xenora Font", "Segoe UI", sans-serif;
     color: #ffffff;
+    font-size: 10pt;
     background-color: transparent;
 }
 
@@ -12,29 +13,129 @@ QMainWindow {
 
 /* Panel Style */
 #XenoraPanel {
-    background-color: rgba(25, 25, 35, 0.7);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(20, 20, 35, 0.8);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border: 1px solid rgba(100, 180, 255, 0.2);
+    border-bottom: none;
+}
+
+/* Glowing effect for panel */
+#XenoraPanel::item {
+    border-bottom: 2px solid transparent;
+}
+
+#XenoraPanel::item:selected {
+    border-bottom: 2px solid rgba(120, 200, 255, 0.8);
+}
+
+/* Start Button */
+#StartButton {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+                        stop:0 rgba(60, 100, 200, 0.8), 
+                        stop:1 rgba(30, 60, 120, 0.8));
+    border-radius: 20px;
+    border: 1px solid rgba(120, 200, 255, 0.4);
+}
+
+#StartButton:hover {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+                        stop:0 rgba(80, 120, 220, 0.9), 
+                        stop:1 rgba(40, 80, 160, 0.9));
+    border: 1px solid rgba(140, 220, 255, 0.6);
+}
+
+#StartButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+                        stop:0 rgba(50, 90, 180, 0.8), 
+                        stop:1 rgba(30, 70, 140, 0.8));
+}
+
+/* Clock Style */
+#ClockLabel {
+    font-size: 12pt;
+    font-weight: bold;
+    color: rgba(220, 240, 255, 0.9);
+    padding: 0 12px;
+    background-color: rgba(40, 60, 100, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(100, 180, 255, 0.2);
 }
 
 /* Start Menu Style */
 #StartMenu {
-    background-color: rgba(30, 30, 45, 0.95);
+    background-color: rgba(25, 25, 45, 0.95);
     border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(120, 200, 255, 0.3);
+    padding: 15px;
+}
+
+#StartMenu::section {
+    background-color: rgba(40, 60, 100, 0.3);
+    border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+}
+
+#UserSection {
+    background-color: rgba(40, 60, 100, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+#UserName {
+    font-size: 14pt;
+    font-weight: bold;
+    color: rgba(220, 240, 255, 0.95);
+}
+
+#AppsSection {
+    background-color: rgba(35, 35, 60, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+#PowerSection {
+    background-color: rgba(40, 60, 100, 0.3);
+    border-radius: 12px;
+    padding: 5px;
+    margin-top: 15px;
 }
 
 #StartMenu QPushButton {
-    background-color: rgba(60, 60, 80, 0.7);
-    border-radius: 8px;
-    padding: 10px;
+    background-color: rgba(45, 65, 110, 0.7);
+    border-radius: 10px;
+    padding: 12px;
     color: white;
     text-align: left;
     icon-size: 24px;
+    border: 1px solid rgba(100, 180, 255, 0.15);
 }
 
 #StartMenu QPushButton:hover {
-    background-color: rgba(80, 80, 120, 0.8);
+    background-color: rgba(60, 100, 160, 0.8);
+    border: 1px solid rgba(100, 180, 255, 0.4);
+}
+
+#StartMenu QPushButton:pressed {
+    background-color: rgba(40, 60, 100, 0.7);
+}
+
+#PowerButton {
+    background-color: rgba(180, 60, 60, 0.7) !important;
+}
+
+#PowerButton:hover {
+    background-color: rgba(220, 70, 70, 0.8) !important;
+}
+
+#SettingsButton {
+    background-color: rgba(60, 120, 180, 0.7) !important;
+}
+
+#SettingsButton:hover {
+    background-color: rgba(80, 140, 200, 0.8) !important;
 }
 
 /* System Tray Style */
@@ -42,35 +143,45 @@ QMainWindow {
     background-color: transparent;
 }
 
-#SystemTray QPushButton {
-    background-color: rgba(60, 60, 80, 0.5);
-    border-radius: 6px;
-    padding: 5px;
+#TrayIcon {
+    background-color: rgba(40, 60, 100, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(100, 180, 255, 0.15);
 }
 
-#SystemTray QPushButton:hover {
-    background-color: rgba(80, 80, 120, 0.6);
+#TrayIcon:hover {
+    background-color: rgba(60, 100, 160, 0.4);
+    border: 1px solid rgba(100, 180, 255, 0.3);
 }
 
 /* Desktop Icons */
 #DesktopIconView QLabel {
     color: white;
-    font-size: 12px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    font-size: 10pt;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 /* Window Style */
 #XenoraWindow {
-    background-color: rgba(35, 35, 50, 0.95);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(20, 20, 35, 0.95);
+    border-radius: 15px;
+    border: 1px solid rgba(100, 180, 255, 0.3);
 }
 
 #TitleBar {
-    background-color: rgba(40, 40, 60, 0.9);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+                       stop:0 rgba(40, 60, 100, 0.9), 
+                       stop:1 rgba(20, 35, 60, 0.9));
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     height: 32px;
+    border-bottom: 1px solid rgba(100, 180, 255, 0.2);
+}
+
+#WindowTitle {
+    font-size: 10pt;
+    font-weight: bold;
+    color: rgba(220, 240, 255, 0.95);
 }
 
 #TitleBar QPushButton {
@@ -84,24 +195,214 @@ QMainWindow {
 
 #CloseButton {
     background-color: rgba(240, 80, 80, 0.7);
+    border: 1px solid rgba(255, 100, 100, 0.3);
 }
 
 #CloseButton:hover {
     background-color: rgba(240, 80, 80, 1.0);
+    border: 1px solid rgba(255, 100, 100, 0.6);
 }
 
 #MinimizeButton {
     background-color: rgba(240, 180, 60, 0.7);
+    border: 1px solid rgba(255, 200, 100, 0.3);
 }
 
 #MinimizeButton:hover {
     background-color: rgba(240, 180, 60, 1.0);
+    border: 1px solid rgba(255, 200, 100, 0.6);
 }
 
 #MaximizeButton {
     background-color: rgba(60, 180, 60, 0.7);
+    border: 1px solid rgba(100, 220, 100, 0.3);
 }
 
 #MaximizeButton:hover {
     background-color: rgba(60, 180, 60, 1.0);
+    border: 1px solid rgba(100, 220, 100, 0.6);
+}
+
+/* Window Content */
+#WindowContent {
+    background-color: rgba(25, 25, 40, 0.9);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/* Scrollbar styling */
+QScrollBar:vertical {
+    border: none;
+    background: rgba(30, 40, 60, 0.3);
+    width: 10px;
+    margin: 0px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(100, 140, 200, 0.7);
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(120, 180, 255, 0.8);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background: rgba(30, 40, 60, 0.3);
+    height: 10px;
+    margin: 0px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:horizontal {
+    background: rgba(100, 140, 200, 0.7);
+    min-width: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: rgba(120, 180, 255, 0.8);
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+/* Buttons, menus, and other controls */
+QPushButton {
+    background-color: rgba(45, 65, 110, 0.7);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: white;
+    border: 1px solid rgba(100, 180, 255, 0.15);
+}
+
+QPushButton:hover {
+    background-color: rgba(60, 100, 160, 0.8);
+    border: 1px solid rgba(100, 180, 255, 0.4);
+}
+
+QPushButton:pressed {
+    background-color: rgba(40, 60, 100, 0.7);
+}
+
+QLineEdit {
+    background-color: rgba(30, 35, 50, 0.7);
+    border-radius: 6px;
+    padding: 6px;
+    color: white;
+    border: 1px solid rgba(100, 180, 255, 0.2);
+}
+
+QLineEdit:focus {
+    border: 1px solid rgba(100, 180, 255, 0.5);
+    background-color: rgba(35, 45, 70, 0.8);
+}
+
+QComboBox {
+    background-color: rgba(30, 35, 50, 0.7);
+    border-radius: 6px;
+    padding: 6px;
+    color: white;
+    border: 1px solid rgba(100, 180, 255, 0.2);
+}
+
+QComboBox:hover {
+    border: 1px solid rgba(100, 180, 255, 0.4);
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 20px;
+    border-left: none;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/icons/arrow-down.png);
+    width: 12px;
+    height: 12px;
+}
+
+QMenu {
+    background-color: rgba(25, 25, 45, 0.95);
+    border-radius: 8px;
+    border: 1px solid rgba(100, 180, 255, 0.3);
+    padding: 5px;
+}
+
+QMenu::item {
+    padding: 6px 25px 6px 25px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: rgba(60, 100, 160, 0.7);
+}
+
+QCheckBox {
+    color: white;
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(100, 180, 255, 0.3);
+    background-color: rgba(30, 35, 50, 0.7);
+}
+
+QCheckBox::indicator:checked {
+    background-color: rgba(60, 120, 200, 0.7);
+    image: url(:/icons/check.png);
+}
+
+QRadioButton {
+    color: white;
+    spacing: 8px;
+}
+
+QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    border: 1px solid rgba(100, 180, 255, 0.3);
+    background-color: rgba(30, 35, 50, 0.7);
+}
+
+QRadioButton::indicator:checked {
+    background-color: rgba(60, 120, 200, 0.7);
+    image: url(:/icons/radio.png);
+}
+
+/* Add animations and transitions */
+QWidget {
+    transition: background-color 0.2s, border 0.2s;
+}
+
+/* Add futuristic glowing effects */
+#XenoraPanel::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 5%;
+    right: 5%;
+    height: 10px;
+    background: radial-gradient(ellipse at center, rgba(100, 180, 255, 0.6) 0%, rgba(100, 180, 255, 0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.glowing-element {
+    box-shadow: 0 0 15px rgba(100, 180, 255, 0.5);
 }
