@@ -1,3 +1,13 @@
+#include "xenorasystem.h"
+#include <QDebug>
+#include <QFile>
+#include <QDir>
+#include <QPainter>
+#include <QRandomGenerator>
+#include <QLinearGradient>
+#include <QColor>
+#include <QPoint>
+
 #ifndef XENORASYSTEM_H
 #define XENORASYSTEM_H
 

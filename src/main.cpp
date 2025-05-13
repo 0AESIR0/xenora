@@ -3,6 +3,10 @@
 #include <QDir>
 #include <QDebug>
 #include <QPainter>
+#include <QRandomGenerator>
+#include <QTextStream>
+#include <QLinearGradient>
+#include <QColor>
 #include "xenorasystem.h"
 
 // Kaynakların bulunduğundan emin olacak yardımcı fonksiyon

@@ -17,12 +17,9 @@ XenoraSystem::~XenoraSystem() {
 void XenoraSystem::initialize() {
     qDebug() << "Initializing XenoraOS...";
     
-    // Check for resource availability and create fallback resources if needed
-    QFile resourceCheck(":/background.jpg");
-    if (!resourceCheck.exists()) {
-        qWarning() << "Resources not found, creating fallback resources...";
-        createFallbackResources();
-    }
+    // Artık resources/ klasörü yerine doğrudan burada oluşturacağız
+    // resource dosyalarını kontrol etmek zorunda değiliz
+    createFallbackResources();
     
     // Create settings manager first as other components depend on it
     m_settingsManager = new SettingsManager(this);
