@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/system/close.svg</file>
+        <file>icons/system/maximize.svg</file>
+        <file>icons/system/minimize.svg</file>
+        <file>icons/system/restore.svg</file>
+        <file>icons/system/start.svg</file>
+        <file>icons/system/settings.svg</file>
+        <file>icons/system/power.svg</file>
+        <file>icons/system/search.svg</file>
+        <file>icons/system/user.svg</file>
+        <file>icons/system/wifi.svg</file>
+        <file>icons/system/volume.svg</file>
+        <file>icons/system/battery.svg</file>
+        <file>backgrounds/default.jpg</file>
+        <file>fonts/XenoraOS-Regular.ttf</file>
+    </qresource>
+</RCC>
