@@ -45,17 +45,27 @@ void Desktop::initializeDesktop() {
 }
 
 void Desktop::setBackground(const QString &path) {
-    m_background = QPixmap(path);
-    if (m_background.isNull()) {
+    // Kullanıcı tarafından belirtilen path ile veya varsayılan ile dene
+    QPixmap newBg(path);
+    
+    // Eğer belirtilen yol çalışmazsa, resources'tan dene
+    if (newBg.isNull()) {
+        newBg = QPixmap("resources/background.jpg");
+    }
+    
+    // Eğer hala başarısızsa, dinamik olarak oluştur
+    if (newBg.isNull()) {
         qWarning() << "Failed to load background image:" << path;
-        // Set a default gradient background if image loading fails
-        m_background = QPixmap(size());
-        QPainter painter(&m_background);
+        // Gradyan arka plan oluştur
+        newBg = QPixmap(size());
+        QPainter painter(&newBg);
         QLinearGradient gradient(0, 0, width(), height());
         gradient.setColorAt(0, QColor(25, 25, 40));
         gradient.setColorAt(1, QColor(50, 50, 80));
         painter.fillRect(rect(), gradient);
     }
+    
+    m_background = newBg;
     update();
 }
 

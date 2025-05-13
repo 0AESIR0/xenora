@@ -41,7 +41,11 @@ set(HEADER_FILES
     src/settings/settingsmanager.h
 )
 
-add_executable(xenora-ui ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+# Add install step to copy resources
+install(DIRECTORY resources/ DESTINATION resources)
+
+# Modify this section to remove the QRC dependency
+add_executable(xenora-ui ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(xenora-ui
     Qt5::Widgets
