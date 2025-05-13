@@ -192,3 +192,4 @@ void XenoraPopup::setupUi()
         "background-color: transparent;"
     );
 }
+
