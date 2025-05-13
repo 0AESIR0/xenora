@@ -1,0 +1,595 @@
+/* XenoraOS GUI - Quantum Interface Theme
+ * Modern, futuristik ve zarif bir kullanıcı arayüzü deneyimi
+ * Sürüm: 2.0
+ */
+
+/* =============== GENEL STIL =============== */
+* {
+    font-family: 'Ubuntu', 'Segoe UI', 'SF Pro Display', sans-serif;
+    color: #e6f0ff;
+    outline: none;
+    selection-background-color: rgba(120, 80, 255, 100);
+    selection-color: #ffffff;
+}
+
+QMainWindow, QDialog, QWidget {
+    background-color: transparent;
+    border: none;
+}
+
+/* =============== ARAÇ İPUÇLARI =============== */
+QToolTip {
+    background-color: rgba(25, 28, 39, 245);
+    color: #e6f0ff;
+    border: 1px solid rgba(120, 80, 255, 120);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 225;
+}
+
+/* =============== DÜĞMELER =============== */
+QPushButton {
+    background-color: rgba(40, 45, 65, 180);
+    color: #e6f0ff;
+    border: 1px solid rgba(120, 80, 255, 80);
+    border-radius: 8px;
+    padding: 8px 16px;
+    min-width: 80px;
+    min-height: 18px;
+    text-align: center;
+    transition: background-color 0.2s, border 0.2s;
+}
+
+QPushButton:hover {
+    background-color: rgba(60, 70, 100, 200);
+    border: 1px solid rgba(140, 100, 255, 150);
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: rgba(50, 55, 80, 220);
+    border: 1px solid rgba(160, 120, 255, 200);
+    padding: 9px 15px 7px 17px;
+}
+
+QPushButton:disabled {
+    background-color: rgba(40, 40, 50, 120);
+    color: rgba(180, 180, 200, 150);
+    border: 1px solid rgba(80, 80, 100, 50);
+}
+
+QPushButton:checked {
+    background-color: rgba(70, 50, 120, 200);
+    border: 1px solid rgba(160, 120, 255, 200);
+}
+
+QPushButton:flat {
+    background-color: transparent;
+    border: none;
+}
+
+QPushButton:flat:hover {
+    background-color: rgba(80, 90, 120, 70);
+}
+
+QPushButton:flat:pressed {
+    background-color: rgba(60, 70, 100, 100);
+}
+
+/* =============== MENÜLER =============== */
+QMenu {
+    background-color: rgba(25, 28, 39, 245);
+    border: 1px solid rgba(100, 70, 200, 100);
+    border-radius: 12px;
+    padding: 8px 0px;
+}
+
+QMenu::item {
+    padding: 8px 30px 8px 20px;
+    color: #e6f0ff;
+    border-radius: 6px;
+    margin: 2px 6px;
+}
+
+QMenu::item:selected {
+    background-color: rgba(80, 60, 160, 100);
+    color: #ffffff;
+}
+
+QMenu::item:disabled {
+    color: rgba(180, 180, 200, 150);
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: rgba(120, 80, 255, 70);
+    margin: 5px 10px;
+}
+
+QMenu::indicator {
+    width: 18px;
+    height: 18px;
+    padding-left: 8px;
+}
+
+QMenu::icon {
+    padding-left: 8px;
+}
+
+/* =============== KAYDIRMA ÇUBUKLARI =============== */
+QScrollBar:vertical {
+    background: rgba(25, 28, 39, 40);
+    width: 8px;
+    border-radius: 4px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(120, 80, 255, 150);
+    border-radius: 4px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(140, 100, 255, 200);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar:horizontal {
+    background: rgba(25, 28, 39, 40);
+    height: 8px;
+    border-radius: 4px;
+    margin: 2px;
+}
+
+QScrollBar::handle:horizontal {
+    background: rgba(120, 80, 255, 150);
+    border-radius: 4px;
+    min-width: 30px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: rgba(140, 100, 255, 200);
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+/* =============== AÇILIR MENÜLER & METİN KUTULARI =============== */
+QComboBox, QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox {
+    background-color: rgba(35, 40, 55, 180);
+    color: #e6f0ff;
+    border: 1px solid rgba(100, 70, 200, 80);
+    border-radius: 8px;
+    padding: 5px 10px;
+    selection-background-color: rgba(120, 80, 255, 100);
+}
+
+QComboBox:hover, QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover {
+    background-color: rgba(40, 45, 65, 200);
+    border: 1px solid rgba(140, 100, 255, 150);
+}
+
+QComboBox:focus, QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus {
+    border: 1px solid rgba(160, 120, 255, 200);
+    background-color: rgba(45, 50, 70, 220);
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 20px;
+    border-left: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/resources/icons/dropdown-arrow.png);
+    width: 12px;
+    height: 12px;
+}
+
+QComboBox:disabled, QLineEdit:disabled, QTextEdit:disabled, QPlainTextEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {
+    background-color: rgba(35, 38, 45, 100);
+    color: rgba(180, 180, 200, 150);
+    border: 1px solid rgba(80, 80, 100, 50);
+}
+
+/* =============== SEKMELER =============== */
+QTabWidget::pane {
+    border: 1px solid rgba(100, 70, 200, 80);
+    border-radius: 8px;
+    top: -1px;
+    background-color: rgba(25, 28, 39, 200);
+}
+
+QTabBar::tab {
+    background-color: rgba(35, 40, 55, 160);
+    color: #e6f0ff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 8px 16px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background-color: rgba(60, 50, 120, 200);
+    color: #ffffff;
+    border-bottom: 2px solid rgba(160, 120, 255, 200);
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px;
+}
+
+QTabBar::tab:hover:!selected {
+    background-color: rgba(45, 50, 70, 200);
+}
+
+/* =============== AĞAÇ VE LİSTE GÖRÜNÜMLERİ =============== */
+QTreeView, QListView, QTableView {
+    background-color: rgba(25, 28, 39, 180);
+    alternate-background-color: rgba(30, 33, 45, 180);
+    border: 1px solid rgba(100, 70, 200, 80);
+    border-radius: 8px;
+    padding: 5px;
+    selection-background-color: rgba(80, 60, 160, 100);
+}
+
+QTreeView::item, QListView::item, QTableView::item {
+    padding: 5px;
+    border-radius: 4px;
+}
+
+QTreeView::item:selected, QListView::item:selected, QTableView::item:selected {
+    background-color: rgba(80, 60, 160, 150);
+    color: #ffffff;
+}
+
+QTreeView::item:hover:!selected, QListView::item:hover:!selected, QTableView::item:hover:!selected {
+    background-color: rgba(60, 50, 120, 80);
+}
+
+QHeaderView::section {
+    background-color: rgba(35, 40, 55, 200);
+    color: #e6f0ff;
+    padding: 5px;
+    border: none;
+    border-right: 1px solid rgba(100, 70, 200, 80);
+    border-bottom: 1px solid rgba(100, 70, 200, 80);
+}
+
+/* =============== PANEL VE DURUM ÇUBUĞU =============== */
+QStatusBar {
+    background-color: rgba(25, 28, 39, 220);
+    color: #e6f0ff;
+    border-top: 1px solid rgba(100, 70, 200, 80);
+}
+
+QStatusBar::item {
+    border: none;
+}
+
+/* =============== AYRIŞTIRICI =============== */
+QSplitter::handle {
+    background-color: rgba(100, 70, 200, 80);
+}
+
+QSplitter::handle:horizontal {
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    height: 1px;
+}
+
+QSplitter::handle:hover {
+    background-color: rgba(160, 120, 255, 150);
+}
+
+/* =============== GROUP BOXES =============== */
+QGroupBox {
+    border: 1px solid rgba(100, 70, 200, 80);
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: rgba(30, 35, 50, 80);
+    padding: 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 10px;
+    color: #e6f0ff;
+    background-color: rgba(60, 50, 120, 200);
+    border-radius: 5px;
+}
+
+/* =============== PROGRESS BAR =============== */
+QProgressBar {
+    background-color: rgba(35, 40, 55, 180);
+    color: #ffffff;
+    border: 1px solid rgba(100, 70, 200, 80);
+    border-radius: 8px;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+        stop:0 rgba(120, 80, 255, 255), 
+        stop:1 rgba(180, 160, 255, 255));
+    border-radius: 7px;
+}
+
+/* =============== RADIO & CHECKBOXES =============== */
+QRadioButton, QCheckBox {
+    color: #e6f0ff;
+    spacing: 8px;
+}
+
+QRadioButton:hover, QCheckBox:hover {
+    color: #ffffff;
+}
+
+QRadioButton::indicator, QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(100, 70, 200, 150);
+    background-color: rgba(35, 40, 55, 180);
+}
+
+QRadioButton::indicator:checked, QCheckBox::indicator:checked {
+    background-color: rgba(120, 80, 255, 200);
+    border: 1px solid rgba(140, 100, 255, 200);
+    image: url(:/resources/icons/check.png);
+}
+
+QRadioButton::indicator:hover, QCheckBox::indicator:hover {
+    border: 1px solid rgba(160, 120, 255, 200);
+    background-color: rgba(40, 45, 65, 200);
+}
+
+/* =============== SLIDERS =============== */
+QSlider::groove:horizontal {
+    height: 6px;
+    background-color: rgba(35, 40, 55, 180);
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    background-color: rgba(120, 80, 255, 200);
+    width: 16px;
+    height: 16px;
+    margin: -5px 0;
+    border-radius: 8px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: rgba(160, 120, 255, 220);
+}
+
+QSlider::groove:vertical {
+    width: 6px;
+    background-color: rgba(35, 40, 55, 180);
+    border-radius: 3px;
+}
+
+QSlider::handle:vertical {
+    background-color: rgba(120, 80, 255, 200);
+    width: 16px;
+    height: 16px;
+    margin: 0 -5px;
+    border-radius: 8px;
+}
+
+QSlider::handle:vertical:hover {
+    background-color: rgba(160, 120, 255, 220);
+}
+
+/* =============== ÖZEL KONTROLLER =============== */
+/* Sistem tray butonları */
+SystemTrayButton {
+    background-color: rgba(40, 45, 65, 150);
+    border-radius: 18px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0px;
+}
+
+SystemTrayButton:hover {
+    background-color: rgba(60, 70, 100, 180);
+    border: 1px solid rgba(140, 100, 255, 100);
+}
+
+SystemTrayButton:pressed {
+    background-color: rgba(50, 55, 80, 200);
+}
+
+/* Panel başlat düğmesi */
+Panel > QPushButton {
+    background-color: rgba(70, 50, 120, 180);
+    border-radius: 20px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0px;
+}
+
+Panel > QPushButton:hover {
+    background-color: rgba(90, 70, 150, 200);
+    border: 1px solid rgba(160, 120, 255, 150);
+}
+
+/* Görev çubuğu butonları */
+TaskButton {
+    background-color: rgba(40, 45, 65, 120);
+    border-radius: 6px;
+    padding: 4px 12px;
+    color: #e6f0ff;
+    text-align: left;
+}
+
+TaskButton:hover {
+    background-color: rgba(60, 70, 100, 150);
+}
+
+TaskButton:checked {
+    background-color: rgba(70, 50, 120, 180);
+    border-bottom: 2px solid rgba(160, 120, 255, 200);
+}
+
+/* Başlatıcı butonları */
+AppButton {
+    background-color: rgba(40, 45, 65, 150);
+    border-radius: 18px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0px;
+}
+
+AppButton:hover {
+    background-color: rgba(60, 70, 100, 180);
+    border: 1px solid rgba(140, 100, 255, 100);
+}
+
+/* Masaüstü ikonu etiketi */
+QLabel#m_textLabel {
+    background-color: rgba(0, 0, 0, 70);
+    border-radius: 4px;
+    padding: 2px 4px;
+    color: white;
+}
+
+/* =============== GELİŞMİŞ ARAYÜZ EFEKTLARI =============== */
+/* Panel gölge efekti */
+Panel {
+    border-top: 1px solid rgba(160, 120, 255, 100);
+}
+
+QToolBar {
+    background-color: rgba(25, 28, 39, 220);
+    border: none;
+    border-bottom: 1px solid rgba(100, 70, 200, 80);
+    padding: 2px;
+}
+
+QToolBar::separator {
+    width: 1px;
+    background-color: rgba(100, 70, 200, 80);
+    margin: 6px 8px;
+}
+
+QToolButton {
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+QToolButton:hover {
+    background-color: rgba(60, 70, 100, 100);
+}
+
+QToolButton:pressed {
+    background-color: rgba(50, 55, 80, 150);
+}
+
+QToolButton:checked {
+    background-color: rgba(70, 50, 120, 150);
+}
+
+QDockWidget {
+    titlebar-close-icon: url(:/resources/icons/close.png);
+    titlebar-normal-icon: url(:/resources/icons/float.png);
+}
+
+QDockWidget::title {
+    background-color: rgba(35, 40, 55, 200);
+    text-align: center;
+    padding: 5px;
+}
+
+QDockWidget::close-button, QDockWidget::float-button {
+    border: none;
+    padding: 2px;
+    background-color: transparent;
+}
+
+QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+    background-color: rgba(160, 120, 255, 100);
+    border-radius: 3px;
+}
+
+/* =============== MASAÜSTÜ YÖNETİCİSİ VE PENCERE DEKORASYONLARI =============== */
+QDialog {
+    background-color: rgba(25, 28, 39, 245);
+    border: 1px solid rgba(100, 70, 200, 100);
+    border-radius: 10px;
+}
+
+QMessageBox {
+    background-color: rgba(25, 28, 39, 245);
+}
+
+QMessageBox QLabel {
+    color: #e6f0ff;
+}
+
+FileManager QListView, DesktopManager QListView {
+    background-color: transparent;
+    border: none;
+}
+
+FileManager QTreeView::branch {
+    background-color: transparent;
+}
+
+FileManager QTreeView::branch:has-siblings:adjoins-item {
+    border-image: url(:/resources/icons/branch-more.png) 0;
+}
+
+FileManager QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(:/resources/icons/branch-end.png) 0;
+}
+
+/* =============== GELİŞMİŞ ANIMASYON VE GEÇİŞLER =============== */
+/* Tüm geçiş animasyonları */
+* {
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+/* Bileşenlerin açılıp kapanma animasyonları */
+QMenu, QDialog, QToolTip {
+    animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Akıcı geçişler için renk paleti */
+:root {
+    --accent-color: rgba(120, 80, 255, 255);
+    --accent-color-hover: rgba(140, 100, 255, 255);
+    --accent-color-pressed: rgba(100, 60, 220, 255);
+    --background-color: rgba(25, 28, 39, 245);
+    --surface-color: rgba(40, 45, 65, 180);
+    --text-color: #e6f0ff;
+    --text-color-bright: #ffffff;
+    --text-color-disabled: rgba(180, 180, 200, 150);
+}
