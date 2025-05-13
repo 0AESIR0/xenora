@@ -1,0 +1,17 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>background.jpg</file>
+        <file>fonts/xenora-font.ttf</file>
+        <file>icons/start.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/power.png</file>
+        <file>icons/home.png</file>
+        <file>icons/documents.png</file>
+        <file>icons/pictures.png</file>
+        <file>icons/music.png</file>
+        <file>icons/videos.png</file>
+        <file>icons/apps.png</file>
+        <file>style/xenora-style.qss</file>
+    </qresource>
+</RCC>

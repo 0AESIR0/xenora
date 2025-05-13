@@ -1,0 +1,107 @@
+/* Modern XenoraOS styleSheet */
+
+QWidget {
+    font-family: "Xenora Font", sans-serif;
+    color: #ffffff;
+    background-color: transparent;
+}
+
+QMainWindow {
+    background-color: transparent;
+}
+
+/* Panel Style */
+#XenoraPanel {
+    background-color: rgba(25, 25, 35, 0.7);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Start Menu Style */
+#StartMenu {
+    background-color: rgba(30, 30, 45, 0.95);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#StartMenu QPushButton {
+    background-color: rgba(60, 60, 80, 0.7);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    text-align: left;
+    icon-size: 24px;
+}
+
+#StartMenu QPushButton:hover {
+    background-color: rgba(80, 80, 120, 0.8);
+}
+
+/* System Tray Style */
+#SystemTray {
+    background-color: transparent;
+}
+
+#SystemTray QPushButton {
+    background-color: rgba(60, 60, 80, 0.5);
+    border-radius: 6px;
+    padding: 5px;
+}
+
+#SystemTray QPushButton:hover {
+    background-color: rgba(80, 80, 120, 0.6);
+}
+
+/* Desktop Icons */
+#DesktopIconView QLabel {
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Window Style */
+#XenoraWindow {
+    background-color: rgba(35, 35, 50, 0.95);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#TitleBar {
+    background-color: rgba(40, 40, 60, 0.9);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 32px;
+}
+
+#TitleBar QPushButton {
+    background-color: transparent;
+    border-radius: 12px;
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+}
+
+#CloseButton {
+    background-color: rgba(240, 80, 80, 0.7);
+}
+
+#CloseButton:hover {
+    background-color: rgba(240, 80, 80, 1.0);
+}
+
+#MinimizeButton {
+    background-color: rgba(240, 180, 60, 0.7);
+}
+
+#MinimizeButton:hover {
+    background-color: rgba(240, 180, 60, 1.0);
+}
+
+#MaximizeButton {
+    background-color: rgba(60, 180, 60, 0.7);
+}
+
+#MaximizeButton:hover {
+    background-color: rgba(60, 180, 60, 1.0);
+}
