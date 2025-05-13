@@ -57,5 +57,5 @@ include_directories(include)
 
 # Hedef dizinler
 install(TARGETS xenora-ui DESTINATION bin)
-install(FILES resources/xeonaos.desktop DESTINATION /usr/share/xsessions)
+install(FILES resources/xenoraos.desktop DESTINATION /usr/share/xsessions)
 install(FILES resources/Xenoraos-logo.png DESTINATION /usr/share/pixmaps)

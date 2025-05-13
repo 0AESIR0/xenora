@@ -23,6 +23,6 @@
     
     <!-- Logo ve markalama -->
     <file>images/Xenoraos-logo.png</file>
-    <file>xeonaos.desktop</file>
+    <file>xenoraos.desktop</file>
 </qresource>
 </RCC>

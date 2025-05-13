@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=XenoraOS Desktop
+Comment=Modern, futuristic XenoraOS desktop environment
+Exec=xenora-ui
+Icon=/usr/share/pixmaps/Xenoraos-logo.png
+Terminal=false
+Categories=Qt;System;DesktopEnvironment;
+Keywords=desktop;environment;DE;window;manager;
+StartupNotify=true
+X-LightDM-DesktopName=XenoraOS
+X-Ubuntu-Gettext-Domain=xenoraos
