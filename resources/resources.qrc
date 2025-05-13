@@ -1,9 +1,28 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource>
-        background.jpg
-        start-icon.png
-        Xenoraos-logo.png
-        xenora.desktop
-    </qresource>
+<qresource prefix="/">
+    <!-- Stil Dosyaları -->
+    <file>style/dark.qss</file>
+    
+    <!-- İkonlar -->
+    <file>icons/home.png</file>
+    <file>icons/power.png</file>
+    <file>icons/settings.png</file>
+    <file>icons/battery-full.png</file>
+    <file>icons/check.png</file>
+    <file>icons/dropdown-arrow.png</file>
+    <file>icons/branch-more.png</file>
+    <file>icons/branch-end.png</file>
+    <file>icons/close.png</file>
+    <file>icons/float.png</file>
+    <file>icons/start-icon.png</file>
+    
+    <!-- Duvar kağıtları -->
+    <file>wallpapers/default-wallpaper.jpg</file>
+    <file>wallpapers/background.jpg</file>
+    
+    <!-- Logo ve markalama -->
+    <file>images/Xenoraos-logo.png</file>
+    <file>xeonaos.desktop</file>
+</qresource>
 </RCC>
