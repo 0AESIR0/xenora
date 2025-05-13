@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QDir>
 
 Desktop::Desktop(QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint),
@@ -45,24 +46,31 @@ void Desktop::initializeDesktop() {
 }
 
 void Desktop::setBackground(const QString &path) {
-    // Kullanıcı tarafından belirtilen path ile veya varsayılan ile dene
-    QPixmap newBg(path);
+    QString bgPath = path;
+    QPixmap newBg;
     
-    // Eğer belirtilen yol çalışmazsa, resources'tan dene
-    if (newBg.isNull()) {
-        newBg = QPixmap("resources/background.jpg");
+    // Belirtilen yolu dene
+    if (!bgPath.isEmpty()) {
+        newBg = QPixmap(bgPath);
     }
     
-    // Eğer hala başarısızsa, dinamik olarak oluştur
+    // Resources dizinindeki arkaplanı dene
     if (newBg.isNull()) {
-        qWarning() << "Failed to load background image:" << path;
-        // Gradyan arka plan oluştur
+        bgPath = QDir::currentPath() + "/resources/background.jpg";
+        newBg = QPixmap(bgPath);
+    }
+    
+    // Hala bulunamadıysa, dinamik olarak oluştur
+    if (newBg.isNull()) {
+        qWarning() << "Failed to load background image, creating dynamic background";
         newBg = QPixmap(size());
         QPainter painter(&newBg);
         QLinearGradient gradient(0, 0, width(), height());
         gradient.setColorAt(0, QColor(25, 25, 40));
         gradient.setColorAt(1, QColor(50, 50, 80));
         painter.fillRect(rect(), gradient);
+    } else {
+        qDebug() << "Background loaded successfully from:" << bgPath;
     }
     
     m_background = newBg;
@@ -119,10 +127,13 @@ void Desktop::onStartMenuToggled(bool visible) {
 }
 
 void Desktop::setupDesktopIcons() {
+    // Klasör bazlı yollar
+    QString iconPath = QDir::currentPath() + "/resources/icons/";
+    
     // Add some default desktop icons
-    m_iconView->addIcon("Home", ":/icons/system/home.png");
-    m_iconView->addIcon("Documents", ":/icons/system/documents.png");
-    m_iconView->addIcon("Pictures", ":/icons/system/pictures.png");
-    m_iconView->addIcon("Music", ":/icons/system/music.png");
-    m_iconView->addIcon("Settings", ":/icons/system/settings.png");
+    m_iconView->addIcon("Home", iconPath + "home.png");
+    m_iconView->addIcon("Documents", iconPath + "documents.png");
+    m_iconView->addIcon("Pictures", iconPath + "pictures.png");
+    m_iconView->addIcon("Music", iconPath + "music.png");
+    m_iconView->addIcon("Settings", iconPath + "settings.png");
 }

@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDebug>
+#include <QDir>
 
 StartMenu::StartMenu(QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint),
@@ -80,18 +81,20 @@ void StartMenu::createAppsSection() {
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(5);
     
+    QString iconBasePath = QDir::currentPath() + "/resources/icons/";
+    
     // Add app buttons
-    addAppButton("Home", ":/icons/system/home.png");
-    addAppButton("Documents", ":/icons/system/documents.png");
-    addAppButton("Pictures", ":/icons/system/pictures.png");
-    addAppButton("Music", ":/icons/system/music.png");
-    addAppButton("Videos", ":/icons/system/videos.png");
-    addAppButton("Apps", ":/icons/system/apps.png");
+    addAppButton("Home", iconBasePath + "home.png");
+    addAppButton("Documents", iconBasePath + "documents.png");
+    addAppButton("Pictures", iconBasePath + "pictures.png");
+    addAppButton("Music", iconBasePath + "music.png");
+    addAppButton("Videos", iconBasePath + "videos.png");
+    addAppButton("Apps", iconBasePath + "apps.png");
     
     // Add settings button
     m_settingsButton = new QPushButton("Settings", m_appsSection);
     m_settingsButton->setObjectName("SettingsButton");
-    m_settingsButton->setIcon(QIcon(":/icons/system/settings.png"));
+    m_settingsButton->setIcon(QIcon(iconBasePath + "settings.png"));
     m_settingsButton->setIconSize(QSize(24, 24));
     connect(m_settingsButton, &QPushButton::clicked, this, &StartMenu::onSettingsButtonClicked);
     
@@ -111,7 +114,7 @@ void StartMenu::createPowerSection() {
     // Power button
     m_powerButton = new QPushButton("Power", m_powerSection);
     m_powerButton->setObjectName("PowerButton");
-    m_powerButton->setIcon(QIcon(":/icons/system/power.png"));
+    m_powerButton->setIcon(QIcon(QDir::currentPath() + "/resources/icons/power.png"));
     m_powerButton->setIconSize(QSize(24, 24));
     connect(m_powerButton, &QPushButton::clicked, this, &StartMenu::onPowerButtonClicked);
     
@@ -122,9 +125,15 @@ void StartMenu::createPowerSection() {
 }
 
 void StartMenu::addAppButton(const QString &name, const QString &iconPath) {
+    QString finalIconPath = iconPath;
+    if (!QFile::exists(finalIconPath)) {
+        // Fallback to resources folder
+        finalIconPath = QDir::currentPath() + "/resources/icons/" + QFileInfo(iconPath).fileName();
+    }
+    
     QPushButton *button = new QPushButton(name, m_appsSection);
     button->setObjectName("AppButton");
-    button->setIcon(QIcon(iconPath));
+    button->setIcon(QIcon(finalIconPath));
     button->setIconSize(QSize(24, 24));
     button->setProperty("appName", name);
     

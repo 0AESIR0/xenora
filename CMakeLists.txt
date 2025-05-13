@@ -11,10 +11,10 @@ find_package(X11 REQUIRED)
 
 include_directories(${X11_INCLUDE_DIR})
 
-# Include resource files
-set(RESOURCE_FILES
-    resources/resources.qrc
-)
+# QRC dosyasını devre dışı bırakıyoruz
+# set(RESOURCE_FILES
+#     resources/resources.qrc
+# )
 
 set(SOURCE_FILES
     src/main.cpp
@@ -41,10 +41,7 @@ set(HEADER_FILES
     src/settings/settingsmanager.h
 )
 
-# Add install step to copy resources
-install(DIRECTORY resources/ DESTINATION resources)
-
-# Modify this section to remove the QRC dependency
+# QRC kaldırıldı
 add_executable(xenora-ui ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(xenora-ui
@@ -58,3 +55,6 @@ target_link_libraries(xenora-ui
     Xdamage
     Xrender
 )
+
+# Tüm kaynak dosyalarını kopyala
+file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QTimer>
+#include <QDir>
 
 Panel::Panel(QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint),
@@ -69,7 +70,7 @@ void Panel::setupStartButton() {
     m_startButton = new QPushButton(m_panelWidget);
     m_startButton->setObjectName("StartButton");
     m_startButton->setFixedSize(40, 40);
-    m_startButton->setIcon(QIcon(":/icons/system/start.png"));
+    m_startButton->setIcon(QIcon(QDir::currentPath() + "/resources/icons/start.png"));
     m_startButton->setIconSize(QSize(24, 24));
     m_startButton->setToolTip("Start Menu");
     

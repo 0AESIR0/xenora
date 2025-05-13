@@ -13,6 +13,5 @@
         <file>icons/videos.png</file>
         <file>icons/apps.png</file>
         <file>style/xenora-style.qss</file>
-        <file>icons/dummy.png</file>
     </qresource>
 </RCC>

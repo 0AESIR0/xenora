@@ -1,7 +1,8 @@
 #include <QApplication>
 #include <QFile>
 #include <QDir>
-#include <QStandardPaths>
+#include <QDebug>
+#include <QPainter>
 #include "xenorasystem.h"
 
 // Kaynakların bulunduğundan emin olacak yardımcı fonksiyon
@@ -12,28 +13,73 @@ void ensureResourcesExist() {
     QDir().mkpath(resDir + "/style");
     QDir().mkpath(resDir + "/icons");
     
-    // Dummy icon oluştur
-    if (!QFile::exists(resDir + "/icons/dummy.png")) {
-        QPixmap pixmap(64, 64);
-        pixmap.fill(Qt::blue);
-        pixmap.save(resDir + "/icons/dummy.png");
-    }
-    
-    // Arka plan oluştur
-    if (!QFile::exists(resDir + "/background.jpg")) {
-        QPixmap bg(1920, 1080);
-        bg.fill(QColor(25, 25, 40));
-        bg.save(resDir + "/background.jpg");
-    }
-    
     // Style dosyasını oluştur
-    if (!QFile::exists(resDir + "/style/xenora-style.qss")) {
-        QFile styleFile(resDir + "/style/xenora-style.qss");
-        if (styleFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&styleFile);
+    QString styleFile = resDir + "/style/xenora-style.qss";
+    if (!QFile::exists(styleFile)) {
+        QFile file(styleFile);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
             out << "/* XenoraOS Style */\n";
-            out << "QWidget { background-color: rgba(25, 25, 40, 0.8); color: white; }\n";
-            styleFile.close();
+            out << "QWidget { background-color: #202035; color: white; }\n";
+            file.close();
+            qDebug() << "Created style file:" << styleFile;
+        }
+    }
+    
+    // Arkaplan oluştur
+    QString bgFile = resDir + "/background.jpg";
+    if (!QFile::exists(bgFile)) {
+        QPixmap bg(1920, 1080);
+        QPainter painter(&bg);
+        QLinearGradient gradient(0, 0, 1920, 1080);
+        gradient.setColorAt(0, QColor(25, 25, 40));
+        gradient.setColorAt(1, QColor(40, 40, 80));
+        painter.fillRect(bg.rect(), gradient);
+        
+        // Uzaya benzer efekt için noktalar ekle
+        painter.setPen(Qt::white);
+        for (int i = 0; i < 500; i++) {
+            int x = QRandomGenerator::global()->bounded(1920);
+            int y = QRandomGenerator::global()->bounded(1080);
+            painter.drawPoint(x, y);
+        }
+        
+        bg.save(bgFile, "JPG");
+        qDebug() << "Created background image:" << bgFile;
+    }
+    
+    // İkonları oluştur
+    QStringList iconNames = {"start", "settings", "power", "home", "documents", 
+                            "pictures", "music", "videos", "apps"};
+    
+    for (const QString &iconName : iconNames) {
+        QString iconFile = resDir + "/icons/" + iconName + ".png";
+        if (!QFile::exists(iconFile)) {
+            QPixmap icon(64, 64);
+            icon.fill(Qt::transparent);
+            QPainter painter(&icon);
+            
+            // Basit yuvarlatılmış ikon
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(Qt::NoPen);
+            
+            // Her ikon için farklı renk
+            if (iconName == "start") painter.setBrush(QColor(60, 100, 200));
+            else if (iconName == "settings") painter.setBrush(QColor(60, 160, 200));
+            else if (iconName == "power") painter.setBrush(QColor(200, 60, 60));
+            else if (iconName == "home") painter.setBrush(QColor(60, 180, 120));
+            else painter.setBrush(QColor(120, 120, 180));
+            
+            painter.drawRoundedRect(4, 4, 56, 56, 10, 10);
+            
+            // İkon tanımlayıcı ekle
+            painter.setPen(Qt::white);
+            painter.setFont(QFont("Arial", 24, QFont::Bold));
+            painter.drawText(icon.rect(), Qt::AlignCenter, 
+                           QString(iconName.at(0)).toUpper());
+            
+            icon.save(iconFile, "PNG");
+            qDebug() << "Created icon:" << iconFile;
         }
     }
 }
@@ -51,11 +97,14 @@ int main(int argc, char *argv[]) {
     ensureResourcesExist();
     
     // Load stylesheet
-    QFile styleFile("resources/style/xenora-style.qss");
+    QFile styleFile(QDir::currentPath() + "/resources/style/xenora-style.qss");
     if (styleFile.open(QFile::ReadOnly)) {
         QString style = QLatin1String(styleFile.readAll());
         app.setStyleSheet(style);
         styleFile.close();
+        qDebug() << "Loaded stylesheet successfully";
+    } else {
+        qWarning() << "Failed to load stylesheet:" << styleFile.fileName();
     }
 
     // Create the main system
